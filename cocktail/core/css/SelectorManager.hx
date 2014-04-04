@@ -12,6 +12,7 @@ import cocktail.core.dom.DOMConstants;
 import cocktail.core.dom.Node;
 import cocktail.core.html.HTMLConstants;
 import cocktail.core.html.HTMLElement;
+import cocktail.core.html.DOMTokenList;
 import cocktail.core.css.CSSData;
 
 /**
@@ -271,8 +272,8 @@ class SelectorManager
 		{
 			//for this check the list of class of the node	
 			case CSS_CLASS(value):
-				var classList:Array<String> = node.classList;
-				
+				var classList:DOMTokenList = node.classList;
+
 				//here the node has no classes
 				if (classList == null)
 				{ 
@@ -282,7 +283,7 @@ class SelectorManager
 				var length:Int = classList.length;
 				for (i in 0...length)
 				{
-					if (value == classList[i])
+					if (value == classList.item(i))
 					{
 						return true;
 					}

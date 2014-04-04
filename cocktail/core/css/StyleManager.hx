@@ -247,7 +247,7 @@ class StyleManager
 									var classListLength:Int = matchedPseudoClasses.nodeClassList.length;
 									for (l in 0...classListLength)
 									{
-										if (matchedPseudoClasses.nodeClassList[l] == selector.firstClass)
+										if (matchedPseudoClasses.nodeClassList.item(l) == selector.firstClass)
 										{
 											//in this case, the selector only has a single
 											//class selector, so it is a match

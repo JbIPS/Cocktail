@@ -8,6 +8,7 @@
 */
 package cocktail.core.css;
 
+import cocktail.core.html.DOMTokenList;
 import cocktail.core.geom.Matrix;
 import cocktail.core.layout.LayoutData;
 import cocktail.core.geom.GeomData;
@@ -78,12 +79,12 @@ class MatchedPseudoClassesVO {
 	public var hasId:Bool;
 	public var nodeId:String;
 	public var hasClasses:Bool;
-	public var nodeClassList:Array<String>;
+	public var nodeClassList:DOMTokenList;
 	public var nodeType:String;
 	
 	public function new(hover:Bool, focus:Bool, active:Bool, link:Bool, enabled:Bool,
 	disabled:Bool, checked:Bool, fullscreen:Bool,
-	hasId:Bool, hasClasses:Bool, nodeId:String, nodeClassList:Array<String>, nodeType:String) 
+	hasId:Bool, hasClasses:Bool, nodeId:String, nodeClassList:DOMTokenList, nodeType:String)
 	{
 		this.hover = hover;
 		this.focus = focus;

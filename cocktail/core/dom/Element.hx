@@ -8,6 +8,7 @@
 */
 package cocktail.core.dom;
 
+import cocktail.core.html.DOMTokenList;
 import cocktail.core.html.HTMLConstants;
 import cocktail.core.html.HTMLElement;
 
@@ -367,14 +368,14 @@ class Element extends Node
                     switch (childNode.nodeType)
                     {
                         case DOMConstants.ELEMENT_NODE:
-                            var classList:Array<String> = childNode.classList;
+                            var classList:DOMTokenList = childNode.classList;
                             if (classList != null)
                             {
                                 var foundFlag:Bool = false;
                                 var classListLength:Int = classList.length;
                                 for (j in 0...classListLength)
                                 {
-                                    if (classList[j] == className && foundFlag == false)
+                                    if (classList.item(j) == className && foundFlag == false)
                                     {
                                         elements.push(childNode);
                                         foundFlag = true;
