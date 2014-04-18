@@ -16,77 +16,77 @@ import cocktail.core.parser.ParserData;
 
 /**
  * A video element is used for playing videos or movies.
- * 
+ *
  * @author Yannick DOMINGUEZ
  */
 class HTMLVideoElement extends HTMLMediaElement
-{	
+{
 	/**
-	 * The default width of the video tag, if the video is not yet loaded 
+	 * The default width of the video tag, if the video is not yet loaded
 	 */
 	private static inline var HTML_VIDEO_DEFAULT_WIDTH:Int = 300;
-	
+
 	/**
-	 * The default height of the video tag, if the video is not yet loaded 
+	 * The default height of the video tag, if the video is not yet loaded
 	 */
 	private static inline var HTML_VIDEO_DEFAULT_HEIGHT:Int = 150;
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// IDL attributes
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * The poster attribute gives the address of an image file that the user
 	 * agent can show while no video data is available.
 	 */
 	public var poster(get_poster, set_poster):String;
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// attributes
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Used to load the poster frame of the video
 	 * if a poster url is provided.
-	 * 
+	 *
 	 * Use an HTMLImageElement to prevent duplicating
 	 * resource loading code from HTMLImageElement
 	 */
 	private var _posterImage:HTMLImageElement;
-	
+
 	/**
 	 * Callback called when the poster image was successfuly loaded
 	 */
 	private var _onPosterLoadComplete:Event->Void;
-	
+
 	/**
 	 * Called when there was an error while loading the poster
 	 */
 	private var _onPosterLoadError:Event->Void;
-	
+
 	/**
 	 * Returns the intrinsic width of the video in CSS pixels
 	 */
 	public var videoWidth(get_videoWidth, never):Int;
-	
+
 	/**
 	 * Returns the intrinsic height of the video in CSS pixels
 	 */
 	public var videoHeight(get_videoHeight, never):Int;
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR & INIT
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * class constructor
 	 */
-	public function new() 
+	public function new()
 	{
 		super(HTMLConstants.HTML_VIDEO_TAG_NAME);
 		initPosterFrame();
 	}
-	
+
 	/**
 	 * Instantiate a video media manager
 	 */
@@ -94,19 +94,28 @@ class HTMLVideoElement extends HTMLMediaElement
 	{
 		nativeMedia = new NativeVideo();
 	}
-	
+
 	/*
 	 * Init the image HTMLElement for the poster image
-	 */ 
+	 */
 	private function initPosterFrame():Void
 	{
 		_posterImage = new HTMLImageElement();
 	}
-	
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// PUBLIC API
+	//////////////////////////////////////////////////////////////////////////////////////////
+
+	public function enterFullScreen():Void
+	{
+
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN ATTRIBUTE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	override public function setAttribute(name:String, value:String):Void
 	{
 		if (name == HTMLConstants.HTML_POSTER_ATTRIBUTE_NAME)
@@ -118,11 +127,11 @@ class HTMLVideoElement extends HTMLMediaElement
 			super.setAttribute(name, value);
 		}
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN PRIVATE RENDERING METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Instantiate a video renderer
 	 */
@@ -130,11 +139,11 @@ class HTMLVideoElement extends HTMLMediaElement
 	{
 		elementRenderer = new VideoRenderer(this, coreStyle);
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC HELPER METHOD
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Wheter the rendered frame for the video should
 	 * be its poster or the current video frame
@@ -148,14 +157,14 @@ class HTMLVideoElement extends HTMLMediaElement
 		{
 			return false;
 		}
-		
+
 		switch (readyState)
 		{
 			//if no video data is yet loaded, render the poster frame
 			case HTMLMediaElement.HAVE_NOTHING, HTMLMediaElement.HAVE_METADATA:
 				return true;
 		}
-		
+
 		//if the video is not playing and the current playback position
 		//is the beggining of the video, then the poster frame should be
 		//rendered instead of the video's first frame
@@ -163,14 +172,14 @@ class HTMLVideoElement extends HTMLMediaElement
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PRIVATE POSTER LOADING METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Called when the poster image was successfuly loaded.
 	 * Invalidate the rendering of the video element
@@ -180,7 +189,7 @@ class HTMLVideoElement extends HTMLMediaElement
 		removeListeners();
 		invalidate();
 	}
-	
+
 	/**
 	 * Called when there was an error while loading
 	 * the poster image
@@ -189,7 +198,7 @@ class HTMLVideoElement extends HTMLMediaElement
 	{
 		removeListeners();
 	}
-	
+
 	/**
 	 * Remove the poster image listeners
 	 */
@@ -198,18 +207,18 @@ class HTMLVideoElement extends HTMLMediaElement
 		_posterImage.removeEventListener(EventConstants.LOAD, _onPosterLoadComplete);
 		_posterImage.removeEventListener(EventConstants.ERROR, _onPosterLoadError);
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// IDL GETTER/SETTER
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Starts the loading of the poster frame of the video
 	 */
 	private function set_poster(value:String):String
 	{
 		super.setAttribute(HTMLConstants.HTML_POSTER_ATTRIBUTE_NAME, value);
-		
+
 		_onPosterLoadComplete = onPosterLoadComplete;
 		_onPosterLoadError = onPosterLoadError;
 		_posterImage.addEventListener(EventConstants.LOAD, _onPosterLoadComplete);
@@ -217,16 +226,16 @@ class HTMLVideoElement extends HTMLMediaElement
 		_posterImage.src = value;
 		return value;
 	}
-	
+
 	private function get_poster():String
 	{
 		return getAttributeAsDOMString(HTMLConstants.HTML_POSTER_ATTRIBUTE_NAME);
 	}
-	
+
 	/////////////////////////////////
 	// GETTER/SETTER
 	////////////////////////////////
-	
+
 	/**
 	 * Return the intrinsic width of the video
 	 * if available, else return CSS default for
@@ -243,7 +252,7 @@ class HTMLVideoElement extends HTMLMediaElement
 			return HTML_VIDEO_DEFAULT_WIDTH;
 		}
 	}
-	
+
 	/**
 	 * Same as for width
 	 */

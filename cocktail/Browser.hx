@@ -14,34 +14,39 @@ import cocktail.core.window.Window;
 /**
  * Entry point of the Cocktail library
  * mimicking js.Browser
- * 
+ *
  * @author Yannick DOMINGUEZ
  */
-class Browser 
+class Browser
 {
 	/**
 	 * Return the html document
 	 */
 	public static var document(default, null):HTMLDocument;
-	
+
 	/**
 	 * return the window
 	 */
 	public static var window(default, null):Window;
-	
+
+	/**
+	* Returns a reference to the navigator object, which can be queried for information about the application running the script.
+	**/
+	public static var navigator: Navigator;
+
 	/**
 	 * class constructor. private as this
 	 * class is used through static methods
 	 */
-	private function new() 
+	private function new()
 	{
-		
+
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC STATIC METHOD
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * instantiate Docuement and Window, called
 	 * the first time either of them is requested
