@@ -8,6 +8,9 @@
 */
 package cocktail.core.html;
 
+import cocktail.html.PositionErrorCallback;
+import cocktail.html.PositionCallback;
+
 class Geolocation{
 
 	public function new(){

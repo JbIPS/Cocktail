@@ -8,6 +8,7 @@
 */
 package cocktail.core.window;
 
+
 import cocktail.core.dom.Document;
 import cocktail.core.event.Event;
 import cocktail.core.event.EventCallback;
@@ -22,13 +23,15 @@ import cocktail.core.css.CSSData;
 import cocktail.core.layout.LayoutData;
 import cocktail.core.history.History;
 
+typedef RequestAnimationFrameCallback = Float -> Bool;
+
 /**
  * Represents the window through which the Document is
  * viewed
- * 
+ *
  * It holds a reference to the class proxying access
  * to platform specific event and methods
- * 
+ *
  * @author Yannick DOMINGUEZ
  */
 class Window extends EventCallback
@@ -37,37 +40,37 @@ class Window extends EventCallback
 	 * return the document viewed through the window
 	 */
 	public var document(default, null):HTMLDocument;
-	
+
 	/**
 	 * Height (in pixels) of the browser window viewport including,
 	 * if rendered, the horizontal scrollbar.
 	 */
 	public var innerHeight(get_innerHeight, never):Int;
-	
+
 	/**
 	 * Width (in pixels) of the browser window viewport including,
 	 * if rendered, the vertical scrollbar.
 	 */
 	public var innerWidth(get_innerWidth, never):Int;
-	
+
 	/**
 	 * A reference to the history instance
 	 */
 	public var history:History;
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTOR & INIT
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * class constructor. Initialise the Document
 	 */
-	public function new(htmlDocument:HTMLDocument) 
+	public function new(htmlDocument:HTMLDocument)
 	{
 		super();
 		init(htmlDocument);
 	}
-	
+
 	/**
 	 * clean up method
 	 */
@@ -77,7 +80,7 @@ class Window extends EventCallback
 		history.dispose();
 		history = null;
 	}
-	
+
 	/**
 	 * Initialise the Document and set platform specific
 	 * listener on it
@@ -86,15 +89,15 @@ class Window extends EventCallback
 	{
 		document = htmlDocument;
 		setDocumentListener(document);
-		
+
 		// history
 		history = new History(htmlDocument);
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC METHOD
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Creates a new secondary browser window and loads the referenced resource.
 	 */
@@ -102,11 +105,20 @@ class Window extends EventCallback
 	{
 		document.navigateToURL(url, name);
 	}
-	
+
+	/**
+	* Tells the browser that an animation is in progress, requesting that the browser schedule a repaint of the window for the next animation frame
+	* // TODO fill it up!
+	**/
+	public function requestAnimationFrame(callback_:RequestAnimationFrameCallback):Int
+	{
+		return 0;
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PRIVATE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * set listeners for document events which should also be dispatched on the window
 	 */
@@ -115,16 +127,16 @@ class Window extends EventCallback
 		document.addEventListener(EventConstants.LOAD, function(e) dispatchEvent(e));
 		document.addEventListener(EventConstants.RESIZE, function(e) dispatchEvent(e));
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// SETTERS/GETTERS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	private function get_innerHeight():Int
 	{
 		return Math.floor(document.getViewportHeight());
 	}
-	
+
 	private function get_innerWidth():Int
 	{
 		return Math.floor(document.getViewportWidth());

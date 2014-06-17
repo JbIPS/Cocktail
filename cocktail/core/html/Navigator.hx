@@ -10,12 +10,12 @@ package cocktail.core.html;
 
 /**
 * Navigator object, which can be queried for information about the application running the script.
-
 **/
 import cocktail.core.html.rtc.NavigatorUserMediaErrorCallback;
 import cocktail.core.html.rtc.NavigatorUserMediaSuccessCallback;
 import cocktail.html.Geolocation;
 import cocktail.html.BatteryManager;
+
 class Navigator{
 
 	public function new(){
@@ -103,7 +103,7 @@ class Navigator{
 	public var vendorSub: String;
 
 	public function getGamepads():GamepadList {
-
+		return new GamepadList();
 	}
 
 	public function getStorageUpdates():Void {

@@ -8,6 +8,7 @@
 */
 package cocktail.core.html;
 
+import cocktail.html.HTMLCollection;
 import cocktail.core.css.CascadeManager;
 import cocktail.core.css.CSSStyleDeclaration;
 import cocktail.core.css.InitialStyleDeclaration;
@@ -61,6 +62,11 @@ import cocktail.core.font.FontData;
  */
 class HTMLElement extends Element
 {
+
+	public static inline var TEXT_NODE:Int = 3;
+
+	public static inline var ELEMENT_NODE : Int = 1;
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// IDL attributes
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +115,8 @@ class HTMLElement extends Element
 	 * HTMLElement with hiden attribute set are not rendered.
 	 */
 	public var hidden(get_hidden, set_hidden):Bool;
+
+	public var children (default, default): HTMLCollection;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// Scroll attributes

@@ -8,6 +8,7 @@
 */
 package cocktail;
 
+import cocktail.html.Navigator;
 import cocktail.core.html.HTMLDocument;
 import cocktail.core.window.Window;
 

@@ -8,6 +8,9 @@
 */
 package cocktail.core.html;
 
+import cocktail.html.OListElement;
+import cocktail.html.LIElement;
+import cocktail.html.UListElement;
 import cocktail.html.DivElement;
 import cocktail.html.ParagraphElement;
 import cocktail.html.SpanElement;
@@ -686,7 +689,7 @@ class HTMLDocument extends Document
 			return documentElement.querySelectorAll(selectors);
 		}
 
-		return [];
+		return new NodeList();
 	}
 
 	/**
@@ -945,6 +948,30 @@ class HTMLDocument extends Document
 	public function createDivElement():DivElement
 	{
 		return cast createElement(HTMLConstants.HTML_DIV_TAG_NAME);
+	}
+
+	/**
+	* A typed shortcut for createElement("li").
+	**/
+	public function createLIElement():LIElement
+	{
+		return cast createElement(HTMLConstants.HTML_LI_TAG_NAME);
+	}
+
+	/**
+	* A typed shortcut for createElement("ul").
+	**/
+	public function createUListElement():UListElement
+	{
+		return cast createElement(HTMLConstants.HTML_UL_TAG_NAME);
+	}
+
+	/**
+	* A typed shortcut for createElement("ol").
+	**/
+	public function createOListElement():OListElement
+	{
+		return cast createElement(HTMLConstants.HTML_OL_TAG_NAME);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -1507,7 +1534,7 @@ class HTMLDocument extends Document
 			layerRendererTmp.updateStackingContext();
 		}
 		var elementRendererAtPoint:ElementRenderer = _hitTestManager.getTopMostElementRendererAtPoint(layerRendererTmp.stackingContext, x, y);
-		
+
 		//might be null, for instance when mouse leaves the
 		//window
 		if (elementRendererAtPoint == null)

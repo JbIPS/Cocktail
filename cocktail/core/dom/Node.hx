@@ -18,19 +18,19 @@ import haxe.Log;
  * interface expose methods for dealing with children, not all objects implementing the Node
  * interface may have children. For example, Text nodes may not have children, and adding children
  * to such nodes results in a DOMException being raised.
- * 
+ *
  * TODO 5 : implement DOMException in all of the DOM package
- * 
+ *
  * The attributes nodeName, nodeValue and attributes are included as a mechanism to get at node
  * information without casting down to the specific derived interface.
  * In cases where there is no obvious mapping of these attributes for a specific nodeType
  * (e.g., nodeValue for an Element or attributes for a Comment), this returns null.
- * Note that the specialized interfaces may contain additional and more convenient mechanisms to get and set the relevant information. 
- * 
+ * Note that the specialized interfaces may contain additional and more convenient mechanisms to get and set the relevant information.
+ *
  * @author Yannick DOMINGUEZ
  */
 class Node extends EventCallback
-{	
+{
 	/**
 	 * The parent of this node. All nodes, except Attr, Document, DocumentFragment,
 	 * Entity, and Notation may have a parent. However,
@@ -38,68 +38,68 @@ class Node extends EventCallback
 	 * to the tree, or if it has been removed from the tree, this is null.
 	 */
 	public var parentNode:Node;
-	
+
 	/**
-	 * A NodeList that contains all children of this node. 
+	 * A NodeList that contains all children of this node.
 	 * If there are no children, this is a NodeList containing no nodes.
 	 */
 	public var childNodes(default, null):NodeList;
-	
+
 	/**
 	 * The first child of this node. If there is no such node,
 	 * this returns null.
 	 */
 	public var firstChild(get_firstChild, never):Node;
-	
+
 	/**
 	 * The last child of this node. If there is no such node,
 	 * this returns null.
 	 */
 	public var lastChild(get_lastChild, never):Node;
-	
+
 	/**
-	 * The node immediately following this node. 
+	 * The node immediately following this node.
 	 * If there is no such node, this returns null.
 	 */
 	public var nextSibling(get_nextSibling, never):Node;
-	
+
 	/**
-	 * The node immediately preceding this node. 
+	 * The node immediately preceding this node.
 	 * If there is no such node, this returns null.
 	 */
 	public var previousSibling(get_previousSibling, never):Node;
-	
+
 	/**
 	 * A value representing the underlying object
 	 */
 	public var nodeType(get_nodeType, never):Int;
-	
+
 	/**
 	 * The value of this node, depending on its type.
 	 * When it is defined to be null, setting it has no effect,
 	 * including if the node is read-only
 	 */
 	public var nodeValue(get_nodeValue, set_nodeValue):String;
-	
+
 	/**
 	 * The name of this node, depending on its type
 	 */
 	public var nodeName(get_nodeName, never):String;
-	
+
 	/**
-	 * A NamedNodeMap containing the attributes of this node 
+	 * A NamedNodeMap containing the attributes of this node
 	 * (if it is an Element) or null otherwise.
 	 */
 	public var attributes(default, null):NamedNodeMap;
-	
+
 	/**
-	 * The Document object associated with this node. 
+	 * The Document object associated with this node.
 	 * This is also the Document object used to create new nodes.
 	 * When this node is a Document or a DocumentType
 	 * which is not used with any Document yet, this is null.
 	 */
 	public var ownerDocument(default, set_ownerDocument):Document;
-	
+
 	/**
 	 * The textContent attribute must return the following, depending on the context object:
 	 *
@@ -111,23 +111,24 @@ class Node extends EventCallback
 	 *	ProcessingInstruction
 	 * 	Comment
 	 *	The context object's data.
-	 * 
+	 *
 	 *  Any other node
 	 *	Null.
-	 * 
+	 *
 	 * TODO : implement setting
 	 */
-	public var textContent(get_textContent, null):String;
-	
+	@:isVar
+	public var textContent(get, set):String;
+
 	/**
 	 * class constructor
 	 */
-	public function new() 
+	public function new()
 	{
 		super();
 		initChildNodes();
 	}
-	
+
 	/**
 	 * Instantiate an array to hold child nodes
 	 * for this node
@@ -136,15 +137,15 @@ class Node extends EventCallback
 	{
 		childNodes = new NodeList();
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
-	 * Removes the child node indicated by oldChild 
+	 * Removes the child node indicated by oldChild
 	 * from the list of children, and returns it.
-	 * 
+	 *
 	 * @param The node being removed.
 	 * @return The node removed.
 	 */
@@ -154,36 +155,36 @@ class Node extends EventCallback
 		childNodes.remove(oldChild);
 		return oldChild;
 	}
-	
+
 	/**
 	 * Adds the node newChild to the end of the list of children of this node.
 	 * If the newChild is already in the tree, it is first removed.
-	 * @param	newChild The node to add. If it is a DocumentFragment object, 
+	 * @param	newChild The node to add. If it is a DocumentFragment object,
 	 * the entire contents of the document fragment are moved into the child list of this node
-	 * 
+	 *
 	 * TODO 5 : implement DocumentFragment
-	 * 
+	 *
 	 * @return The node added.
 	 */
 	public function appendChild(newChild:Node):Node
 	{
 		removeFromParentIfNecessary(newChild);
-		
+
 		newChild.parentNode = this;
 		childNodes.push(newChild);
-	
+
 		return newChild;
 	}
-	
+
 	/**
-	 * Inserts the node newChild before the existing child node refChild. 
+	 * Inserts the node newChild before the existing child node refChild.
 	 * If refChild is null, insert newChild at the end of the list of children.
 	 * If newChild is a DocumentFragment object, all of its children are
-	 * inserted, in the same order, before refChild. 
-	 * If the newChild is already in the tree, it is first removed.	
-	 * 
+	 * inserted, in the same order, before refChild.
+	 * If the newChild is already in the tree, it is first removed.
+	 *
 	 * @param	newChild The node to insert.
-	 * @param	refChild The reference node, i.e., the node before 
+	 * @param	refChild The reference node, i.e., the node before
 	 * which the new node must be inserted.
 	 * @return	The node being inserted
 	 */
@@ -194,39 +195,39 @@ class Node extends EventCallback
 			appendChild(newChild);
 		}
 		else
-		{	
+		{
 			var length:Int = childNodes.length;
 			for (i in 0...length)
-			{		
+			{
 				if (childNodes[i] == refChild)
 				{
 					childNodes.insert(i, newChild);
-					
+
 					//set the parent of the new child
 					removeFromParentIfNecessary(newChild);
 					newChild.parentNode = this;
 					return newChild;
 				}
 			}
-			
+
 			//if the ref child wasn't found, throw
 			//a dom exception
 			throw DOMException.NOT_FOUND_ERR;
 		}
-		
+
 		return newChild;
 	}
-	
+
 	/**
 	 * Returns whether this node is the same node as the given one.
 	 * This method provides a way to determine whether two Node
 	 * references returned by the implementation reference
 	 * the same object. When two Node references are references
-	 * to the same object, even if through a proxy, the references 
+	 * to the same object, even if through a proxy, the references
 	 * may be used completely interchangeably, such that all attributes
 	 * have the same values and calling the same DOM method on either
 	 * reference always has exactly the same effect.
-	 * 
+	 *
 	 * @param	other The node to test against.
 	 * @return Returns true if the nodes are the same, false otherwise.
 	 */
@@ -234,14 +235,14 @@ class Node extends EventCallback
 	{
 		return other == this;
 	}
-	
+
 	/**
 	 * Replaces the child node oldChild with newChild in the list of children,
 	 * and returns the oldChild node.
 	 * If newChild is a DocumentFragment object, oldChild is replaced by all
 	 * of the DocumentFragment children, which are inserted in the same order.
 	 * If the newChild is already in the tree, it is first removed.
-	 * 
+	 *
 	 * @param	newChild The new node to put in the child list.
 	 * @param	oldChild The node being replaced in the list.
 	 * @return	The node replaced.
@@ -257,10 +258,10 @@ class Node extends EventCallback
 				appendChild(newChild);
 			}
 		}
-		
+
 		return oldChild;
 	}
-	
+
 	/**
 	 * Returns whether this node has any children.
 	 */
@@ -268,14 +269,14 @@ class Node extends EventCallback
 	{
 		return childNodes.length > 0;
 	}
-	
+
 	/**
 	 * Returns a duplicate of this node, i.e., serves as a generic copy constructor for nodes.
-	 * The duplicate node has no parent (parentNode is null) and no user data. 
+	 * The duplicate node has no parent (parentNode is null) and no user data.
 	 * User data associated to the imported node is not carried over. However, if any UserDataHandlers
 	 * has been specified along with the associated data these handlers will be called with
 	 * the appropriate parameters before this method returns.
-	 * 
+	 *
 	 * Cloning an Element copies all attributes and their values, including those generated by the
 	 * XML processor to represent defaulted attributes, but this method does not copy any
 	 * children it contains unless it is a deep clone. This includes text contained in an
@@ -285,12 +286,12 @@ class Node extends EventCallback
 	 * no matter whether this is a deep clone or not. Cloning an EntityReference automatically constructs
 	 * its subtree if a corresponding Entity is available, no matter whether this is a deep clone or not.
 	 * Cloning any other type of node simply returns a copy of this node.
-	 * 
+	 *
 	 * Note that cloning an immutable subtree results in a mutable copy, but the children
 	 * of an EntityReference clone are readonly. In addition, clones of unspecified Attr nodes
 	 * are specified. And, cloning Document, DocumentType, Entity, and Notation nodes is implementation dependent.
-	 * 
-	 * @param	deep If true, recursively clone the subtree under the specified node; 
+	 *
+	 * @param	deep If true, recursively clone the subtree under the specified node;
 	 * if false, clone only the node itself (and its attributes, if it is an Element).
 	 * @return The duplicate node
 	 */
@@ -307,20 +308,20 @@ class Node extends EventCallback
 		}
 		return clonedNode;
 	}
-	
+
 	/**
-	 * Returns whether this node (if it is an element) has any attributes. 
+	 * Returns whether this node (if it is an element) has any attributes.
 	 * Always false for any other Node sub classes
 	 */
 	public function hasAttributes():Bool
 	{
 		return false;
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN PRIVATE METHOD
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * Return all the parent of the node until the root
 	 * node is reached
@@ -329,20 +330,20 @@ class Node extends EventCallback
 	{
 		var parent:Node = parentNode;
 		var targetAncestors:Array<EventTarget> = super.getTargetAncestors();
-		
+
 		while (parent != null)
 		{
 			targetAncestors.push(parent);
 			parent = parent.parentNode;
 		}
-		
+
 		return targetAncestors;
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// PRIVATE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/**
 	 * clone this node and return the clone.
 	 * What gets clone varies for each
@@ -352,9 +353,9 @@ class Node extends EventCallback
 	{
 		return new Node();
 	}
-		
+
 	/**
-	 * When a node is about to be added to another, 
+	 * When a node is about to be added to another,
 	 * first detach it if it was already attached to the tree
 	 */
 	private function removeFromParentIfNecessary(newChild:Node):Void
@@ -365,11 +366,11 @@ class Node extends EventCallback
 			parentNode.removeChild(newChild);
 		}
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	// SETTERS/GETTERS
 	//////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	private function get_firstChild():Node
 	{
 		if (hasChildNodes() == true)
@@ -381,7 +382,7 @@ class Node extends EventCallback
 			return null;
 		}
 	}
-	
+
 	private function get_lastChild():Node
 	{
 		if (hasChildNodes() == true)
@@ -393,17 +394,17 @@ class Node extends EventCallback
 			return null;
 		}
 	}
-	
+
 	private function get_nextSibling():Node
 	{
-		
+
 		//if the node is not attached, it
 		//has no siblings
 		if (parentNode == null)
 		{
 			return null;
 		}
-		
+
 		if (parentNode.lastChild != this)
 		{
 			//loop in all child to find this node and return
@@ -418,12 +419,12 @@ class Node extends EventCallback
 				}
 			}
 		}
-		
+
 		//if the node is the last of its parent, it has no
 		//next sibling
 		return null;
 	}
-	
+
 	/**
 	 * same as get_nextSibling
 	 */
@@ -433,7 +434,7 @@ class Node extends EventCallback
 		{
 			return null;
 		}
-		
+
 		if (parentNode.firstChild != this)
 		{
 			var length:Int = parentNode.childNodes.length;
@@ -445,43 +446,48 @@ class Node extends EventCallback
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
-	private function get_nodeType():Int 
+
+	private function get_nodeType():Int
 	{
 		return -1;
 	}
-	
-	private function get_nodeValue():String 
+
+	private function get_nodeValue():String
 	{
 		return null;
 	}
-	
-	private function set_nodeValue(value:String):String 
+
+	private function set_nodeValue(value:String):String
 	{
 		if (value != null)
 		{
 			//Raised when the node is readonly and if it is not defined to be null.
 			throw DOMException.NO_MODIFICATION_ALLOWED_ERR;
 		}
-		
+
 		return value;
 	}
-	
+
 	private function set_ownerDocument(value:Document):Document
 	{
 		return ownerDocument = value;
 	}
-	
+
 	private function get_nodeName():String
 	{
 		return null;
 	}
-	
+
 	private function get_textContent():String
 	{
-		return null;
+		return textContent;
+	}
+
+	private function set_textContent(text: String):String
+	{
+		return textContent = text;
 	}
 }

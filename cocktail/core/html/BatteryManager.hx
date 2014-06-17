@@ -6,7 +6,9 @@
  * Cocktail is available under the MIT license
  * http://www.silexlabs.org/labs/cocktail-licensing/
 */
-package cocktail.html;
+package cocktail.core.html;
+
+import cocktail.html.EventListener;
 
 typedef BatteryManager = {
 	var charging: Bool;
